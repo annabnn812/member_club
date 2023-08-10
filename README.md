@@ -1,7 +1,7 @@
 # member_club
 [A members club with a loyalty program ( DAPP)](https://youtu.be/Q3Qqm3iS9z4)
 
-##My idea is to create a Worldcoin-powered App for a private members club with a loyalty program.
+## My idea is to create a Worldcoin-powered App for a private members club with a loyalty program.
 
 This application would allow the club to track customer spending and behavior in a way that is both transparent and secure. The club would be able to see how much money each customer spends on drinks, food, and other services, as well as how often they visit the club. This information would help the club to understand what its customers want and need, and to make sure that they are providing a positive and enjoyable experience.
 
@@ -20,7 +20,9 @@ In addition to the benefits that customers would receive from the club, they wou
 
   
 I believe that this application would be a valuable addition to any private club. It would help the club to better understand its customers and to provide them with a more personalized experience.
-____________________________________________AnnaBNN 2023©________________________________________
+
+
+ ## AnnaBNN 2023© :kiss:
 
 ## Getting Started
   git clone https://github.com/annabnn812/member_club.git
