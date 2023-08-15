@@ -1,5 +1,5 @@
 # member_club
-YouTuBe video :point_right:  [A members club with a loyalty program ( DAPP)](https://youtu.be/Q3Qqm3iS9z4)
+YouTuBe video :point_right:  https://youtu.be/jzQI3FeWfWQ
 
 ## My idea is to create a Worldcoin-powered App for a private members club with a loyalty program.
 
