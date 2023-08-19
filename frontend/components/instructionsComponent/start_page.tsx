@@ -18,6 +18,9 @@ export default function Home() {
 	const onSuccess = (result: ISuccessResult) => {
 		console.log(result);
 		router.push('/presentation');
+		setTimeout(() => {
+			router.push('/restaurant');
+		  }, 3000); // 3 seconds delay
 	};
 
 	return (
