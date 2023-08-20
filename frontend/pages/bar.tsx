@@ -241,9 +241,7 @@ export default function Menubar() {
       }
 
     
-
-
-  // Function to handle adding an item to the cart
+// Function to handle adding an item to the cart
   const addToCart = (menuItem: CartItem) => {
     setCartItems((prevCartItems) => [...prevCartItems, menuItem]);
     setOrderCount((prevOrderCount) => prevOrderCount + 1);
@@ -254,48 +252,56 @@ export default function Menubar() {
     return cartItems.reduce((total, item) => total + item.price, 0);
   };
 
-  // Function to handle the "Pay" button click
-  const handlePay = async () => {
-    const totalPrice = calculateTotalPrice();
-
-    // Check if the wallet is connected
-    const web3Modal = new Web3Modal();
-    const connection = await web3Modal.connect();
-    if (!connection) {
-      alert("Please connect your wallet to proceed with the payment.");
-      return;
-    }
-
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-
+  //const Base Gerli contractAddress = "0xe12FA7FE9a38AA31ffaf31500Ad41FA3227FB764"; 
+  //const contract = await new ethers.Contract(contractAddress, LoyaltyClub.abi, signer);
+  
+    // Function to handle the "Pay" button click
+    const handlePay = async () => {
+      const totalPrice = calculateTotalPrice(); // This should be the total price in dollars
     
-    const contractAddress = "0x212DE749d16419C2eBc337C11C29dcb323A364A5"; 
-    const contract = new ethers.Contract(contractAddress, LoyaltyClub.abi, signer);
+      // Check if the wallet is connected
+      const web3Modal = new Web3Modal();
+      const connection = await web3Modal.connect();
+      if (!connection) {
+        alert("Please connect your wallet to proceed with the payment.");
+        return;
+      }
+    
+      const provider = new ethers.providers.Web3Provider(connection);
+      const signer = provider.getSigner();
+    
+      const contractAddress = "0xe12FA7FE9a38AA31ffaf31500Ad41FA3227FB764";
+      const contract = new ethers.Contract(contractAddress, LoyaltyClub.abi, signer);
+    
+      try {
+        // Get the current ETH/USD price from Chainlink Oracle
+        const ethPrice = await contract.getPrice();
+    
+        // Convert total price in dollars to ETH
+        const totalPriceInETH = ethers.utils.parseEther((totalPrice / ethPrice * 100000000 ).toFixed(18));
+    
+        // Call the contract's 'pay' function to make the payment
+        const transaction = await contract.pay(totalPriceInETH, { value: totalPriceInETH });
+    
+        // Wait for the transaction to be mined
+        await transaction.wait();
+    
+        // After the payment is made, you can call the 'releasePayment' function to transfer the payment to the seller
+        const releaseTransaction = await contract.releasePayment();
+        await releaseTransaction.wait();
+    
+        alert("Payment successful! Total amount: $" + totalPrice);
+        // Reset the cart and order count after successful payment
+        setCartItems([]);
+        setOrderCount(0);
+      } catch (error) {
+        console.error("Payment failed:", error);
+        alert("Payment failed. Please try again.");
+      }
+    };
 
-    try {
-      // Call the contract's 'pay' function to make the payment
-      // Make sure to replace 'totalPrice' with the actual total price to be paid
-      const transaction = await contract.pay(totalPrice, { value: totalPrice });
   
-      // Wait for the transaction to be mined
-      await transaction.wait();
-  
-      // After the payment is made, you can call the 'releasePayment' function to transfer the payment to the seller
-      const releaseTransaction = await contract.releasePayment();
-      await releaseTransaction.wait();
-  
-      alert("Payment successful! Total amount: $" + totalPrice);
-      // Reset the cart and order count after successful payment
-      setCartItems([]);
-      setOrderCount(0);
-    } catch (error) {
-      console.error("Payment failed:", error);
-      alert("Payment failed. Please try again.");
-    }
 
-  
-  };
   return (
     <>
     <Header />
